@@ -1,0 +1,107 @@
+class Farmer:
+    def _init_(self, farmer_id, name, location):
+        self.farmer_id = farmer_id
+        self.name = name
+        self.location = location
+
+    def display_info(self):
+        print(f"Farmer ID: {self.farmer_id}")
+        print(f"Farmer Name: {self.name}")
+        print(f"Location: {self.location}")
+
+class CropRecord:
+    total_records = 0
+
+    def _init_(self, record_id, farmer, crop_name, farm_size, expected_yield, actual_yield):
+        self.record_id = record_id
+        self.farmer = farmer
+        self.crop_name = crop_name
+        self.farm_size = farm_size
+        self.expected_yield = expected_yield
+        self.actual_yield = actual_yield
+        CropRecord.total_records += 1
+
+    def calculate_performance(self):
+        if self.expected_yield == 0:
+            return 0
+        return (self.actual_yield / self.expected_yield) * 100
+
+    def update_record(self, actual_yield):
+        self.actual_yield = actual_yield
+
+    def display_info(self):
+        performance = self.calculate_performance()
+        print("----------------------------------------")
+        print(f"Record ID: {self.record_id}")
+        print(f"Farmer: {self.farmer.name}")
+        print(f"Location: {self.farmer.location}")
+        print(f"Crop: {self.crop_name}")
+        print(f"Farm Size: {self.farm_size} acres")
+        print(f"Expected Yield: {self.expected_yield} kg")
+        print(f"Actual Yield: {self.actual_yield} kg")
+        print(f"Yield Performance: {performance:.2f}%")
+        print("----------------------------------------")
+
+    @classmethod
+    def get_total_records(cls):
+        return cls.total_records
+
+    @staticmethod
+    def is_valid_yield(yield_amount):
+        return yield_amount >= 0
+
+def add_crop_record(crop_records):
+    print("\nADD NEW CROP RECORD")
+    record_id = input("Enter record ID: ")
+    farmer_id = input("Enter farmer ID: ")
+    farmer_name = input("Enter farmer name: ")
+    location = input("Enter farm location: ")
+    crop_name = input("Enter crop name: ")
+    try:
+        farm_size = float(input("Enter farm size in acres: "))
+        expected_yield = float(input("Enter expected yield in kg: "))
+        actual_yield = float(input("Enter actual yield in kg: "))
+    except ValueError:
+        print("Please enter valid numbers for farm size and yield.")
+        return
+    if not CropRecord.is_valid_yield(farm_size) or not CropRecord.is_valid_yield(actual_yield):
+        print("Farm size and yield must be positive numbers!")
+        return
+    farmer = Farmer(farmer_id, farmer_name, location)
+    record = CropRecord(record_id, farmer, crop_name, farm_size, expected_yield, actual_yield)
+    crop_records.append(record)
+    print("\nCrop record added successfully.")
+
+def display_records(crop_records):
+    if len(crop_records) == 0:
+        print("\nNo crop records available.")
+        return
+    print("\nCROP YIELD RECORDS")
+    for record in crop_records:
+        record.display_info()
+
+def main():
+    crop_records = []
+    while True:
+        print("\n===================================")
+        print("     CROP YIELD MONITORING SYSTEM")
+        print("===================================")
+        print("1. Add Crop Record")
+        print("2. Display Crop Records")
+        print("3. Show Total Records")
+        print("4. Exit")
+        choice = input("Enter your choice: ")
+        if choice == "1":
+            add_crop_record(crop_records)
+        elif choice == "2":
+            display_records(crop_records)
+        elif choice == "3":
+            print(f"\nTotal crop records: {CropRecord.get_total_records()}")
+        elif choice == "4":
+            print("\nThank you for using the Crop Yield Monitoring System.")
+            break
+        else:
+            print("\nInvalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
