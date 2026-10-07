@@ -1,5 +1,5 @@
 class Farmer:
-    def _init_(self, farmer_id, name, location):
+    def __init__(self, farmer_id, name, location):
         self.farmer_id = farmer_id
         self.name = name
         self.location = location
@@ -12,7 +12,7 @@ class Farmer:
 class CropRecord:
     total_records = 0
 
-    def _init_(self, record_id, farmer, crop_name, farm_size, expected_yield, actual_yield):
+    def __init__(self, record_id, farmer, crop_name, farm_size, expected_yield, actual_yield):
         self.record_id = record_id
         self.farmer = farmer
         self.crop_name = crop_name
